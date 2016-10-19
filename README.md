@@ -4,7 +4,7 @@ The code is tested on Ubuntu 16.04.1 with Gnome 3.
 
 Depends only on bash and xinput.
 
-Turns off touchscreen when stylus is near screen.
+Turns off touchscreen input when stylus is near screen.
 
 Stylus status is checked every 100 ms.
 
