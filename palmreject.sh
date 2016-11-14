@@ -3,6 +3,11 @@
 # configuration. run "xinput list" to see ids for your devices.
 touchscreen_device=12
 stylus_device=13
+disable_timeout=20
+
+
+last_state=-1
+timer=0
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,13 +27,22 @@ while [ 1 ]
 do
   state=`xinput query-state "$stylus_device" | grep -c "ValuatorClass Mode=Absolute Proximity=In"`
 
-  if [ "$state" -ne 0 ];then
-    echo "Disabling touchscreen, device $touchscreen_device"
-    xinput --disable $touchscreen_device
-  else
-    echo "Enabling touchscreen, device $touchscreen_device"
-    xinput --enable $touchscreen_device
+  if [ "$state" -ne "$last_state" ] || [ "$timer" -lt $((disable_timeout+1)) ];then
+    if [ "$state" -ne 0 ];then
+      echo "Disabling touchscreen, device $touchscreen_device"
+      timer=$((disable_timeout+1))
+      xinput --disable $touchscreen_device
+    elif [ "$timer" -eq $((disable_timeout+1)) ]; then
+      timer=0
+    elif [ "$timer" -lt "$disable_timeout" ]; then
+      timer=$((timer+1))
+    else
+      echo "Enabling touchscreen, device $touchscreen_device"
+      timer=$((disable_timeout+1))
+      xinput --enable $touchscreen_device
+    fi
   fi
+  last_state=$state
   sleep 0.1
 done
 
