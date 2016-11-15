@@ -6,7 +6,9 @@ Depends only on bash and xinput.
 
 Turns off touchscreen input when stylus is near screen.
 
-Stylus status is checked every 100 ms.
+Stylus status is checked every 100 ms, a timeout is by
+default set to 2 seconds for re-enabling the touchscreen
+after stylus input.
 
 You need to check the ids for your devices.
 Run "xinput list" on your system and edit the
