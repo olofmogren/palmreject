@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# configuration. run "xinput list" to see ids for your devices.
-touchscreen_device=12
-stylus_device=13
-disable_timeout=20
-
-
-last_state=-1
-timer=0
-
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -22,7 +13,23 @@ timer=0
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# configuration. run "xinput list" to see ids for your devices.
+touchscreen_device_name='FTSC'
+stylus_device_name='Wacom'
+stylus_device_specifier='stylus'
+disable_timeout=20
+
 # code follows. only change this if you know what you are doing.
+
+# find out device ids from xinput:
+touchscreen_device=`xinput --list | grep $touchscreen_device_name | cut -c 55,56 -`
+
+stylus_device=`xinput --list | grep $stylus_device_name | grep $stylus_device_specifier | cut -c 55,56 -`
+
+last_state=-1
+timer=0
+
+# main loop:
 while [ 1 ]
 do
   state=`xinput query-state "$stylus_device" | grep -c "ValuatorClass Mode=Absolute Proximity=In"`
