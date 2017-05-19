@@ -16,15 +16,15 @@
 # configuration. run "xinput list" to see ids for your devices.
 touchscreen_device_name='FTSC'
 stylus_device_name='Wacom'
-stylus_device_specifier='stylus'
-disable_timeout=20
+stylus_device_specifier='Pen'
+disable_timeout=10
 
 # code follows. only change this if you know what you are doing.
 
 # find out device ids from xinput:
-touchscreen_device=`xinput --list | grep $touchscreen_device_name | cut -c 55,56 -`
+touchscreen_device=`xinput --list | grep $touchscreen_device_name | grep -Po '(?<=id\=)[0-9]+'`
 
-stylus_device=`xinput --list | grep $stylus_device_name | grep $stylus_device_specifier | cut -c 55,56 -`
+stylus_device=`xinput --list | grep $stylus_device_name | grep $stylus_device_specifier | head -n 1 | grep -Po '(?<=id\=)[0-9]+'`
 
 last_state=-1
 timer=0
